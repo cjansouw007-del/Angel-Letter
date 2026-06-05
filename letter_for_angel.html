@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Ensures perfect scaling and rendering on all mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>A Letter for Angel</title>
+    
+    <!-- Importing Tailwind CSS for robust, mobile-first styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Importing elegant fonts for the letter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom Styles and Animations */
+        body {
+            /* A soft, warm gradient background to evoke a feeling of nostalgia and love */
+            background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            font-family: 'Playfair Display', serif;
+            overflow-x: hidden;
+            /* Prevents pull-to-refresh on mobile to keep the experience immersive */
+            overscroll-behavior-y: contain; 
+        }
+
+        .font-cinzel {
+            font-family: 'Cinzel', serif;
+        }
+
+        /* Smooth transition utility classes */
+        .fade-transition {
+            transition: opacity 1.2s ease-in-out, transform 1.2s ease-in-out;
+        }
+
+        /* Envelope CSS Art */
+        .envelope-wrapper {
+            position: relative;
+            width: 280px;
+            height: 180px;
+            background-color: #f4eade;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .envelope-wrapper:active {
+            transform: scale(0.95);
+        }
+
+        /* The back flap of the envelope */
+        .envelope-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 140px solid transparent;
+            border-right: 140px solid transparent;
+            border-top: 90px solid #e3d3c1;
+            z-index: 3;
+            transform-origin: top;
+            transition: transform 0.8s ease-in-out;
+        }
+
+        /* The bottom and side folds of the envelope */
+        .envelope-body {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 140px solid #ecdac6;
+            border-right: 140px solid #ecdac6;
+            border-bottom: 90px solid #dfc7af;
+            z-index: 2;
+        }
+
+        /* Wax seal design */
+        .wax-seal {
+            position: absolute;
+            top: 90px;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background: #8b0000;
+            border-radius: 50%;
+            z-index: 4;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3), inset 0 0 10px rgba(100,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffcccc;
+            font-size: 1.2rem;
+            font-family: 'Cinzel', serif;
+            transition: opacity 0.5s ease;
+        }
+
+        /* Animation class to open the envelope */
+        .open-envelope .envelope-flap {
+            transform: rotateX(180deg);
+            z-index: 1; /* Pushes flap behind the letter */
+        }
+        
+        .open-envelope .wax-seal {
+            opacity: 0; /* Hide seal when opening */
+        }
+
+        /* Subtle pulsing animation for the "Little letter for Angel" text */
+        @keyframes gentle-pulse {
+            0%, 100% { opacity: 0.7; transform: translateY(0); }
+            50% { opacity: 1; transform: translateY(-3px); }
+        }
+        .animate-pulse-gentle {
+            animation: gentle-pulse 3s infinite ease-in-out;
+        }
+
+        /* Glowing effect for the photo button */
+        @keyframes button-glow {
+            0%, 100% { box-shadow: 0 0 15px rgba(212, 175, 55, 0.2); }
+            50% { box-shadow: 0 0 25px rgba(212, 175, 55, 0.6); }
+        }
+        .btn-glow {
+            animation: button-glow 2.5s infinite ease-in-out;
+            background: linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%);
+            color: white;
+        }
+
+        /* Image styling to ensure it fits beautifully on mobile without distortion */
+        .photo-container img {
+            max-width: 100%;
+            max-height: 85vh;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body class="min-h-screen w-full flex items-center justify-center m-0 p-0 text-gray-800">
+
+    <!-- ========================================== -->
+    <!-- SCENE 1: THE ENVELOPE                      -->
+    <!-- ========================================== -->
+    <div id="scene-envelope" class="fade-transition absolute inset-0 flex flex-col items-center justify-center px-4 z-50">
+        
+        <!-- Interactive Envelope -->
+        <div id="envelope-element" class="envelope-wrapper mt-10">
+            <div class="envelope-flap"></div>
+            <div class="envelope-body"></div>
+            <div class="wax-seal">A</div>
+        </div>
+
+        <!-- Instructional Text -->
+        <div class="mt-12 text-center animate-pulse-gentle">
+            <h1 class="text-2xl font-cinzel text-gray-700 tracking-wider">Little letter for Angel</h1>
+            <p class="text-sm text-gray-500 italic mt-2">Tap the envelope to open</p>
+        </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- SCENE 2: THE LETTER                        -->
+    <!-- ========================================== -->
+    <div id="scene-letter" class="fade-transition absolute inset-0 flex flex-col items-center justify-start py-12 px-6 sm:px-12 md:px-24 opacity-0 pointer-events-none translate-y-4 z-40 overflow-y-auto">
+        
+        <div class="max-w-2xl w-full bg-white/80 backdrop-blur-sm rounded-lg shadow-xl p-8 sm:p-12 mb-12 border border-gray-100">
+            
+            <!-- Salutation -->
+            <p class="text-xl mb-6 italic text-gray-600">My dearest Angel,</p>
+
+            <!-- The Body of the Letter -->
+            <div class="space-y-6 text-lg sm:text-xl leading-relaxed text-gray-800">
+                <p>
+                    Take your time, sweetheart. Let’s just walk slowly and take in every single second of this. 
+                </p>
+                <p>
+                    Look at you... you are the most beautiful bride I have ever laid eyes on. I’ve pictured this day in my mind since you were just a little girl running around the house, but nothing could have prepared me for how breathtaking you actually look right now.
+                </p>
+                <p>
+                    As we take these steps toward your future, I want you to feel the weight of my arm under yours and know that this support will never, ever fade. Even though you can't always see me, I promise I will always be walking right beside you, just like this.
+                </p>
+                <p>
+                    I am so incredibly proud of the kind, strong, and radiant woman you have grown up to be. The person waiting for you at the end of this aisle is the luckiest soul in the world today.
+                </p>
+                <p>
+                    I am giving away my greatest treasure, but remember that no matter where life takes you, you will always be my little girl.
+                </p>
+                <p>
+                    Now, take a deep breath, lift your chin up, and let’s walk together into your beautiful new life. 
+                </p>
+                <p>
+                    I love you, more than words could ever say, for all of time.
+                </p>
+            </div>
+
+            <!-- Sign-off -->
+            <p class="text-right text-xl mt-10 italic text-gray-600 font-bold">
+                — Dad
+            </p>
+
+            <!-- Divider -->
+            <div class="w-full flex justify-center mt-12 mb-8">
+                <div class="h-px w-2/3 bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
+            </div>
+
+            <!-- Tap to See Photo Button -->
+            <div class="flex justify-center pb-4">
+                <button id="btn-show-photo" class="btn-glow px-8 py-4 rounded-full font-cinzel tracking-wider text-sm sm:text-base transition-transform active:scale-95 shadow-lg flex items-center space-x-3">
+                    <svg xmlns="http://www.w3.org/polygons/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd" />
+                    </svg>
+                    <span>Tap to see our moment</span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- SCENE 3: THE PHOTO REVEAL                  -->
+    <!-- ========================================== -->
+    <div id="scene-photo" class="fade-transition absolute inset-0 flex flex-col items-center justify-center bg-black/95 opacity-0 pointer-events-none z-50">
+        
+        <!-- Close button to return to letter -->
+        <button id="btn-close-photo" class="absolute top-6 right-6 text-white/70 hover:text-white transition-colors p-2 rounded-full bg-white/10 backdrop-blur-md">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+
+        <!-- The Image Container -->
+        <div class="photo-container w-full h-full p-6 flex flex-col justify-center items-center">
+            
+            <img 
+                src="https://i.imgur.com/4MhQ3Gq.jpeg" 
+                alt="A beautiful moment with Dad" 
+                class="fade-transition opacity-0 scale-95" 
+                id="main-photo"
+                onerror="this.onerror=null; this.outerHTML='<div class=\'text-white text-center font-cinzel space-y-4\'><p class=\'text-xl\'>Picture could not load.</p><p class=\'text-sm text-gray-400\'>Please check your internet connection.</p></div>';"
+            />
+            
+            <!-- Emotional caption under the photo -->
+            <p id="photo-caption" class="text-white/80 font-cinzel mt-8 text-center text-sm tracking-widest uppercase opacity-0 fade-transition transition-delay-500">
+                Forever by your side
+            </p>
+        </div>
+    </div>
+
+
+    <!-- ========================================== -->
+    <!-- JAVASCRIPT LOGIC                           -->
+    <!-- ========================================== -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            // Elements
+            const sceneEnvelope = document.getElementById('scene-envelope');
+            const envelopeElement = document.getElementById('envelope-element');
+            const sceneLetter = document.getElementById('scene-letter');
+            const scenePhoto = document.getElementById('scene-photo');
+            
+            const btnShowPhoto = document.getElementById('btn-show-photo');
+            const btnClosePhoto = document.getElementById('btn-close-photo');
+            const mainPhoto = document.getElementById('main-photo');
+            const photoCaption = document.getElementById('photo-caption');
+
+            // 1. Handle clicking the envelope to open the letter
+            sceneEnvelope.addEventListener('click', () => {
+                // Trigger CSS animation to flip the envelope flap
+                envelopeElement.classList.add('open-envelope');
+                
+                // Wait for the flap to open, then transition screens
+                setTimeout(() => {
+                    // Fade out envelope scene
+                    sceneEnvelope.classList.add('opacity-0', '-translate-y-4');
+                    sceneEnvelope.classList.add('pointer-events-none');
+
+                    // Allow time for fade out, then show the letter
+                    setTimeout(() => {
+                        // Hide envelope from DOM rendering completely
+                        sceneEnvelope.style.display = 'none';
+                        
+                        // Bring letter scene into view
+                        sceneLetter.classList.remove('pointer-events-none');
+                        // Small delay to ensure display:none took effect before animating opacity
+                        setTimeout(() => {
+                            sceneLetter.classList.remove('opacity-0', 'translate-y-4');
+                        }, 50);
+
+                    }, 1200); // Wait for envelope fade out
+
+                }, 800); // Wait for flap animation
+            });
+
+            // 2. Handle clicking the button to reveal the photo
+            btnShowPhoto.addEventListener('click', () => {
+                // Fade out the letter slightly to put focus on the incoming dark modal
+                sceneLetter.style.filter = 'blur(4px)';
+                
+                // Show the photo scene container (fade to black)
+                scenePhoto.classList.remove('pointer-events-none');
+                scenePhoto.classList.remove('opacity-0');
+
+                // Wait for the black background to fade in, then reveal the photo
+                setTimeout(() => {
+                    if(mainPhoto) {
+                        mainPhoto.classList.remove('opacity-0', 'scale-95');
+                    }
+                    if(photoCaption) {
+                        photoCaption.classList.remove('opacity-0');
+                    }
+                }, 800);
+            });
+
+            // 3. Handle closing the photo to return to the letter
+            btnClosePhoto.addEventListener('click', () => {
+                // Fade out the photo and caption first
+                if(mainPhoto) {
+                    mainPhoto.classList.add('opacity-0', 'scale-95');
+                }
+                if(photoCaption) {
+                    photoCaption.classList.add('opacity-0');
+                }
+
+                // Wait a moment, then fade out the dark background
+                setTimeout(() => {
+                    scenePhoto.classList.add('opacity-0');
+                    scenePhoto.classList.add('pointer-events-none');
+                    
+                    // Remove the blur from the letter
+                    sceneLetter.style.filter = 'none';
+                }, 600);
+            });
+
+        });
+    </script>
+</body>
+</html>
